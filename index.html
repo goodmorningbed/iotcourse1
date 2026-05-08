@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IoT Strategic Mastery - Pro</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', 'Tajawal', sans-serif;
+            background-color: #080a12;
+            color: #f1f5f9;
+        }
+        .glass-card {
+            background: rgba(30, 41, 59, 0.3);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 1.25rem;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 3px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #1e293b;
+            border-radius: 10px;
+        }
+        .arabic-font {
+            font-family: 'Tajawal', sans-serif;
+        }
+        .tag-pill {
+            font-size: 0.6rem;
+            padding: 0.1rem 0.4rem;
+            border-radius: 0.25rem;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+        .podcast-vertical {
+            background: linear-gradient(180deg, rgba(79, 70, 229, 0.15) 0%, rgba(219, 39, 119, 0.05) 100%);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            height: fit-content;
+        }
+        .nav-item.active {
+            background: rgba(79, 70, 229, 0.15);
+            border-color: rgba(79, 70, 229, 0.3);
+            box-shadow: inset 0 0 10px rgba(79, 70, 229, 0.1);
+        }
+        .video-container {
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+        }
+        .bullet-ar {
+            position: relative;
+            padding-right: 1.25rem;
+        }
+        .bullet-ar::before {
+            content: "•";
+            position: absolute;
+            right: 0;
+            color: #4f46e5;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col selection:bg-indigo-500/30 overflow-x-hidden">
+
+    <!-- Navbar -->
+    <header class="px-8 py-4 flex justify-between items-center border-b border-white/5 sticky top-0 z-50 bg-[#080a12]/90 backdrop-blur-xl">
+        <div class="flex items-center gap-3">
+            <div class="w-2 h-6 bg-indigo-600 rounded-full shadow-[0_0_15px_rgba(79,70,229,0.6)]"></div>
+            <h1 class="text-lg font-semibold tracking-tight">IoT <span class="text-indigo-400">Mastery</span></h1>
+        </div>
+        <div class="flex items-center gap-6">
+            <div class="hidden md:flex gap-4 items-center mr-4 border-r border-white/10 pr-6">
+                <span class="text-[10px] font-mono text-slate-500 uppercase tracking-tighter">Current Mastery</span>
+                <div class="w-32 h-1 bg-slate-800 rounded-full overflow-hidden">
+                    <div id="progressBar" class="h-full bg-indigo-500 w-0 transition-all duration-1000"></div>
+                </div>
+                <span id="progressText" class="text-[10px] font-mono text-indigo-400">0%</span>
+            </div>
+            <a href="javascript:void(0)" onclick="changeContent(0)" class="text-[10px] font-bold text-slate-400 uppercase tracking-widest hover:text-white transition-colors">Course Portal</a>
+        </div>
+    </header>
+
+    <main class="flex-grow container mx-auto px-6 py-6 grid grid-cols-1 lg:grid-cols-12 gap-6">
+        
+        <!-- Left Column: Podcast (Unified) -->
+        <aside class="lg:col-span-3 order-2 lg:order-1">
+            <div id="podcastContainer" class="hidden podcast-vertical p-6 rounded-3xl sticky top-24 space-y-6 animate__animated animate__fadeInLeft">
+                <div class="flex items-center gap-4 border-b border-white/10 pb-4">
+                    <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-pink-500 to-indigo-600 flex items-center justify-center text-white shadow-lg">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
+                        </svg>
+                    </div>
+                    <div class="overflow-hidden">
+                        <span class="text-[9px] font-bold text-pink-500 uppercase tracking-widest">Audio Deep-Dive</span>
+                        <h4 id="podcastTitleAr" class="text-sm font-bold text-white leading-tight arabic-font"></h4>
+                    </div>
+                </div>
+
+                <div class="space-y-5">
+                    <div class="space-y-2">
+                        <span class="text-[9px] font-bold text-slate-500 uppercase tracking-widest block">Summary / الملخص</span>
+                        <p class="text-[11px] text-slate-300 leading-relaxed arabic-font text-right" dir="rtl" id="podcastDescAr"></p>
+                    </div>
+                    
+                    <div class="space-y-3 pt-4 border-t border-white/5">
+                        <span class="text-[9px] font-bold text-slate-500 uppercase tracking-widest block">Covers / النقاط التي يغطيها</span>
+                        <div class="text-[10px] text-slate-400 leading-relaxed arabic-font text-right space-y-2" dir="rtl" id="podcastPointsAr"></div>
+                    </div>
+                </div>
+
+                <div class="pt-4">
+                    <audio id="mainPodcast" controls class="w-full h-8 accent-indigo-500">
+                        <source id="podcastSource" src="" type="audio/mpeg">
+                    </audio>
+                </div>
+            </div>
+            
+            <div id="podcastEmpty" class="glass-card p-8 text-center space-y-4 lg:sticky lg:top-24">
+                <div class="w-12 h-12 rounded-full bg-slate-800 flex items-center justify-center mx-auto text-slate-600">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                    </svg>
+                </div>
+                <p class="text-[10px] text-slate-500 uppercase tracking-widest">Select a chapter to unlock the unified audio overview.</p>
+            </div>
+        </aside>
+
+        <!-- Center Column: Content -->
+        <section class="lg:col-span-6 order-1 lg:order-2 flex flex-col gap-6">
+            <!-- Video Stage -->
+            <div class="video-container relative rounded-[2rem] overflow-hidden bg-black aspect-video border border-white/5">
+                <video id="mainVideo" class="w-full h-full object-cover" controls poster="https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=2070&auto=format&fit=crop">
+                    <source src="overview.mp4" type="video/mp4">
+                </video>
+                <div class="absolute top-4 left-4 bg-black/60 backdrop-blur-md px-3 py-1.5 rounded-full text-[9px] font-bold text-indigo-400 uppercase tracking-widest border border-white/10">
+                    Mode: <span id="currentStatus" class="text-white">Overview</span>
+                </div>
+            </div>
+
+            <!-- Mastery Assurance (Beginning only) -->
+            <div id="masteryAssurance" class="glass-card p-8 border-r-4 border-indigo-500 animate__animated animate__fadeIn" dir="rtl">
+                <h3 class="text-lg font-bold mb-4 text-indigo-400 arabic-font">هل سيضمن لي هذا المسار إتقان المنهج وتحقيق مخرجات التعلم؟</h3>
+                <div class="text-slate-300 arabic-font text-sm leading-relaxed space-y-4">
+                    <p>نعم، اتباع هذه الخطة مصمم خصيصاً ليجعلك تفهم كافة تفاصيل الشرائح وتحقق كل مخرج من مخرجات التعلم، ولكن الأمر يتطلب تنفيذاً نشطاً من جانبك. تتماشى الخطة تماماً مع مخرجات التعلم السبعة الموزعة على الفصول الثمانية.</p>
+                    <p>ولأن اختبارك النهائي يعتمد بشكل كبير على <strong>"الشرح والوصف"</strong>، فإن مجرد قراءة الشرائح مراراً وتكراراً لن يكون كافياً. من خلال اتباع الخطة بدقة وربط النظرية بـ <strong>"أمثلة من الواقع"</strong>، فإنك تتدرب تلقائياً على القدرة على الوصف، والشرح، والفهم، والتحليل، والتمييز، والتطبيق - وهي بالضبط الأفعال المطلوبة في مخرجات تعلم المنهج.</p>
+                    <p>لإتقان المادة حقاً، يجب عليك استخدام الفيديوهات والبودكاست المتوفرة لممارسة <strong>الاستذكار النشط</strong>. من خلال التظاهر بأنك تسجل فيديو أو تشارك في نقاش في بودكاست، فإنك تجبر عقلك على ترجمة النقاط الجافة إلى سرد متماسك. إذا استطعت شرح "كيف ولماذا" لمفهوم ما بصوت عالٍ لشخص غير متخصص - مثل شرح سبب استخدام مفاتيح أمان معينة في LoRaWAN أو كيف يخلق تباين الأجهزة كوابيس للخصوصية - فستكون قد أتقنت التفاصيل وستجتاز اختبارك بسهولة.</p>
+                </div>
+            </div>
+
+            <!-- Content Details -->
+            <div class="space-y-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="space-y-4 border-l-2 border-indigo-500/30 pl-4 text-left">
+                        <span class="text-[9px] font-bold text-indigo-400 uppercase tracking-widest">Mastery Breakdown</span>
+                        <h2 id="videoTitle" class="text-xl font-bold text-white tracking-tight">Overview</h2>
+                        <div id="videoMeta" class="text-xs text-slate-400 leading-relaxed space-y-4"></div>
+                    </div>
+                    <div class="space-y-4 border-r-2 border-cyan-500/30 pr-4 text-right" dir="rtl">
+                        <span class="text-[9px] font-bold text-cyan-400 uppercase tracking-widest arabic-font">الأهداف التعليمية</span>
+                        <h2 id="videoTitleAr" class="text-xl font-bold text-white arabic-font leading-tight">مقدمة المنهج</h2>
+                        <div id="videoMetaAr" class="text-xs text-slate-400 leading-relaxed arabic-font space-y-4"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Right Column: Roadmap -->
+        <aside class="lg:col-span-3 order-3">
+            <div class="glass-card p-6 h-full flex flex-col gap-6">
+                <h3 class="text-xs font-bold uppercase tracking-[0.2em] text-slate-500 px-2">Roadmap</h3>
+                <div class="space-y-6 overflow-y-auto pr-1 custom-scrollbar flex-grow" id="curriculumMenu"></div>
+            </div>
+        </aside>
+    </main>
+
+    <script>
+        // Unified Podcast Repository
+        const podcasts = {
+            1: {
+                titleAr: "صراع السحابة والحافة في هندسة إنترنت الأشياء",
+                summaryAr: "نقاش ومناظرة حول التحديات المعمارية لشبكات إنترنت الأشياء، ولماذا تفشل شبكات الـ IT العادية في تلبية احتياجات المصانع (OT).",
+                pointsAr: [
+                    "الفجوة بين الـ IT والـ OT: الفرق الهائل في الحجم والتعرض المادي.",
+                    "تحليل نموذج IoTWF 7-Layer وكيف يفصل بين التكنولوجيا التشغيلية وتكنولوجيا المعلومات.",
+                    "صراع السحابة والحافة: لماذا تعتبر الحوسبة الطرفية إلزامية لمعالجة البيانات الحرجة محلياً."
+                ],
+                file: "Content/pods/صراع_السحابة_والحافة_في_هندسة_إنترنت_الأشياء.m4a"
+            },
+            2: {
+                titleAr: "تشريح الكائن الذكي من الحواس للعضلات",
+                summaryAr: "غوص عميق في المكونات المادية التي تصنع 'الأشياء الذكية' وكيفية تواصلها مع العالم المادي.",
+                pointsAr: [
+                    "مقارنة بين 'الحساسات' (Sensors) التي تحول العالم المادي لرقمي، و'المشغلات' (Actuators) التي تحوله لحركة.",
+                    "مشكلة عدم التجانس (Heterogeneity Problem): تحدي ربط ملايين الأجهزة الرخيصة والمختلفة في شبكات SANETs.",
+                    "صعوبة توحيد معايير التواصل مقارنة بشبكات الـ Wi-Fi التقليدية."
+                ],
+                file: "Content/pods/تشريح_الكائن_الذكي_من_الحواس_للعضلات.m4a"
+            },
+            3: {
+                titleAr: "المثلث المستحيل في هندسة الشبكات المقيدة",
+                summaryAr: "دليل للنجاة في 'الشبكات المقيدة'، يناقش القيود الفيزيائية لنقل البيانات وكيف تتحدث الأجهزة الذكية محلياً.",
+                pointsAr: [
+                    "المثلث المستحيل (The Impossible Triangle): التنازلات بين المدى، استهلاك الطاقة، ونطاق التردد.",
+                    "كابوس طبقة الـ MAC: لماذا يفشل الـ Wi-Fi التقليدي في البيئات المزدحمة بسبب تصادم البيانات.",
+                    "الحل عبر تقنية TSCH: شرطي مرور ينظم الوقت لتجنب تصادم البيانات."
+                ],
+                file: "Content/pods/المثلث_المستحيل_في_هندسة_الشبكات_المقيدة.m4a"
+            },
+            4: {
+                titleAr: "أمان لورا وان بين التشفير وفوضى الأجهزة",
+                summaryAr: "مناقشة تقنية وتقييم أمني لشبكات المسافات الطويلة (LPWAN) وكوابيس الخصوصية المتعلقة بتنوع الأجهزة.",
+                pointsAr: [
+                    "تحليل تقنية LoRaWAN: فئات الأجهزة (A و C) وخوارزمية Adaptive Data Rate.",
+                    "النموذج الأمني المزدوج: الفرق بين مفتاح الشبكة (NwkSKey) ومفتاح التطبيق (AppSKey).",
+                    "فوضى الأجهزة (Device Heterogeneity): مخاوف الـ FTC واستحالة توفير تحديثات أمنية شاملة."
+                ],
+                file: "Content/pods/أمان_لورا_وان_بين_التشفير_وفوضى_الأجهزة.m4a"
+            }
+        };
+
+        const curriculum = [
+            {
+                phase: "The Foundation",
+                items: [
+                    { 
+                        id: 1, chapter: 1, co: "CO 1-2", 
+                        title: "What is IoT & Why Do We Need It?", titleAr: "ما هو الـ IoT ولماذا نحتاجه؟",
+                        desc: "The fundamental philosophy of IoT, how the internet developed 'senses', and the 0-5% rule for human interaction. It explains the core difference between simple digitization and true IoT using the 'Smart Farming' example.",
+                        descAr: "يشرح هذا الفيديو الفلسفة الأساسية لإنترنت الأشياء وكيف تطور الإنترنت ليمتلك 'حواساً'. يناقش قاعدة الـ 0-5% للتفاعل البشري، ويوضح الفرق الجوهري بين 'الرقمنة' البسيطة وإنترنت الأشياء الحقيقي باستخدام مثال 'المزرعة الذكية'.",
+                        podcastId: null, videoFile: "Content/vids/Chapter_1.mp4"
+                    }
+                ]
+            },
+            {
+                phase: "Architecture & Data",
+                items: [
+                    { 
+                        id: 2, chapter: 2, co: "CO 3", 
+                        title: "IoT Architecture & Why IT Fails", titleAr: "معمارية إنترنت الأشياء ولماذا تفشل شبكات IT التقليدية",
+                        desc: "Explains why traditional IT networks collapse when applied to IoT (OT) due to scale and physical security vulnerabilities. Covers the horizontal architecture (oneM2M) and the IoTWF 7-Layer Model.",
+                        descAr: "يوضح لماذا تنهار شبكات المكاتب العادية (IT) عند تطبيقها على أجهزة إنترنت الأشياء (OT) بسبب ضخامة العدد والضعف الأمني المادي. يشرح المعمارية الأفقية (oneM2M) ونموذج (IoTWF) المكون من 7 طبقات.",
+                        podcastId: 1, videoFile: "Content/vids/Chapter_2.mp4" 
+                    },
+                    { 
+                        id: 3, chapter: 3, co: "CO 4", 
+                        title: "The Data Journey: Edge to Cloud", titleAr: "رحلة البيانات من الحافة إلى السحابة",
+                        desc: "Traces the physical path of data, explaining Edge, Fog, and Cloud computing hierarchies. Discusses why time-critical data must be processed locally at the edge and explains Push vs. Pull data transmission mechanisms.",
+                        descAr: "يتتبع هذا الفيديو المسار الفعلي للبيانات، ويشرح هرمية الحوسبة الطرفية (Edge)، والضبابية (Fog)، والسحابية (Cloud). يوضح لماذا يجب معالجة البيانات الحرجة للوقت محلياً عند الحافة بدلاً من انتظار السحابة، بالإضافة إلى شرح آليات إرسال البيانات.",
+                        podcastId: 1, videoFile: "Content/vids/Chapter_3.mp4" 
+                    }
+                ]
+            },
+            {
+                phase: "Hardware & Smart Objects",
+                items: [
+                    { 
+                        id: 4, chapter: 4, co: "CO 6", 
+                        title: "Anatomy of Smart Objects", titleAr: "تشريح الأشياء الذكية",
+                        desc: "Dives into the physical components of the network, differentiating between Sensors and Actuators. Discusses the challenges of Sensor and Actuator Networks (SANETs) due to device heterogeneity and power constraints.",
+                        descAr: "يغوص في المكونات المادية للشبكة؛ ويفرق بوضوح بين دور 'الحساسات' (Sensors) التي تقرأ العالم المادي، و'المشغلات' (Actuators) التي تتخذ رد الفعل الحركي. يناقش الفيديو أيضاً تحديات شبكات الحساسات والمشغلات (SANETs).",
+                        podcastId: 2, videoFile: "Content/vids/Chapter_4.mp4" 
+                    }
+                ]
+            },
+            {
+                phase: "Communication Criteria",
+                items: [
+                    { 
+                        id: 5, chapter: 5, co: "CO 5", 
+                        title: "Standards & The Impossible Triangle", titleAr: "معايير الاتصال والمثلث المستحيل",
+                        desc: "Explains the physical constraints of data transmission via the 'Impossible Triangle' (Range, Speed, Power). Covers licensed vs. unlicensed frequencies for constrained networks like smart water meters.",
+                        descAr: "يشرح القيود الفيزيائية لنقل البيانات عبر 'المثلث المستحيل' (لا يمكنك الجمع بين المدى الطويل، والسرعة العالية، واستهلاك الطاقة المنخفض في وقت واحد). يوضح كيف ولماذا تُستخدم الترددات المرخصة وغير المرخصة لربط 'الشبكات المقيدة'.",
+                        podcastId: 3, videoFile: "Content/vids/Chapter_5.mp4" 
+                    },
+                    { 
+                        id: 6, chapter: 6, co: "CO 5", 
+                        title: "Last Mile Access Technologies", titleAr: "تقنيات الميل الأخير - Last Mile",
+                        desc: "Focuses on local communication protocols like IEEE 802.15.4 (ZigBee). Details how TSCH acts as a 'traffic cop' to schedule time and prevent data collisions in dense networks.",
+                        descAr: "يركز على بروتوكولات الاتصال المحلية مثل معيار IEEE 802.15.4 (الأساس لتقنيات ZigBee). يشرح بشكل مفصل كيف تقوم تقنية (TSCH) بدور 'شرطي المرور' بتنظيم الوقت ومنع تصادم البيانات في الشبكات المزدحمة لتعويض فشل شبكات الـ Wi-Fi التقليدية.",
+                        podcastId: 3, videoFile: "Content/vids/Chapter_6.mp4" 
+                    }
+                ]
+            },
+            {
+                phase: "LPWAN & Security",
+                items: [
+                    { 
+                        id: 7, chapter: 7, co: "CO 5", 
+                        title: "LoRaWAN & Cellular", titleAr: "تقنيات المسافات الطويلة - LoRaWAN والخلوي",
+                        desc: "Explains how devices communicate over miles with tiny batteries. Details LoRaWAN device classes (A/B/C), Adaptive Data Rate (ADR), and dual encryption, comparing it to cellular networks like NB-IoT.",
+                        descAr: "يشرح كيف تتواصل الأجهزة لمسافات تصل لأميال ببطاريات صغيرة جداً. يفصل تقنية LoRaWAN (أنواع الأجهزة A و B و C)، وخوارزمية التكيف مع البيانات (ADR)، ونظام التشفير المزدوج الذي يمنع مزود الشبكة من قراءة بياناتك الخاصة، مع مقارنة ذلك بالشبكات الخلوية.",
+                        podcastId: 4, videoFile: "Content/vids/Chapter_7.mp4" 
+                    },
+                    { 
+                        id: 8, chapter: 8, co: "CO 7", 
+                        title: "Security & Privacy Issues", titleAr: "الجانب المظلم - قضايا الأمن والخصوصية",
+                        desc: "Reviews security nightmares and the top three FTC concerns (data collection, unexpected use, and data security). Highlights 'Device Heterogeneity' as the biggest threat to unified smart home protection.",
+                        descAr: "يستعرض الكوابيس الأمنية؛ ويشرح مخاوف لجنة التجارة الفيدرالية (FTC) الثلاث الكبرى (جمع البيانات، الاستخدام غير المتوقع، وأمن البيانات). ويركز على 'فوضى الأجهزة' كأكبر تهديد أمني يمنع وضع حل حماية واحد للمنزل الذكي بأكمله.",
+                        podcastId: 4, videoFile: "Content/vids/Chapter_8.mp4" 
+                    }
+                ]
+            },
+            {
+                phase: "Final Review",
+                items: [
+                    { id: 9, type: 'exam', chapter: "RV", co: "CO 1-8", title: "Ultimate IoT Exam Review", titleAr: "المراجعة وقاموس المصطلحات", desc: "An intensive visual glossary for the exam. Provides a definition, descriptive explanation, and a concrete example for every vital term from Chapter 1 to 8.", descAr: "بمثابة قاموس مرئي مكثف للامتحان. يقدم تعريفاً، وشرحاً وصفياً، ومثالاً ملموساً لكل مصطلح حيوي تم ذكره من الفصل الأول وحتى الثامن لتأكيد الفهم والحفظ.", videoFile: "Content/pods/Ultimate_IoT_Exam_Review.mp4", podcastId: null },
+                    { id: 10, type: 'exam', chapter: "Scenario", co: "CO 2-7", title: "Architecting IoT Blueprints", titleAr: "التعمق التقني للهيكلة", desc: "A technical deep-dive combining Chapters 2, 3, 5, 6, and 7. Directly compares technologies, traces data paths, and shows how protocols like TSCH and ADR solve congestion and power issues.", descAr: "هذا الفيديو موجه لفهم الجانب التقني العميق. يجمع بين الفصول (2 و 3 و 5 و 6 و 7) ليقارن بين التقنيات بشكل مباشر، ويتتبع مسار نقل البيانات، وكيف تتعاون بروتوكولات مثل TSCH و ADR لحل مشاكل الازدحام والطاقة.", videoFile: "Content/vids/Architecting_IoT_Blueprints.mp4", podcastId: null },
+                    { id: 11, type: 'exam', chapter: "Scenario", co: "CO 3-8", title: "The Data Journey", titleAr: "دراسة الحالة والمواقف العملية", desc: "Designed for scenario-based questions. Analyzes 3 scenarios (Smart Hospital, Autonomous Factory, Smart Home) based on sensors/actuators used, communication methods, data processing locations, and potential security threats.", descAr: "مصمم خصيصاً للأسئلة القائمة على المواقف. يطرح 3 سيناريوهات (مستشفى ذكي، مصنع مستقل، ومنزل ذكي)، ويحلل كل سيناريو بناءً على: نوع الحساسات والمشغلات، طريقة الاتصال، مكان معالجة البيانات، والتهديدات الأمنية المحتملة.", videoFile: "Content/vids/The_Data_Journey.mp4", podcastId: null }
+                ]
+            }
+        ];
+
+        function init() {
+            const menu = document.getElementById('curriculumMenu');
+            curriculum.forEach((phase) => {
+                const sectionDiv = document.createElement('div');
+                sectionDiv.className = "space-y-3";
+                sectionDiv.innerHTML = `<h5 class="text-[8px] font-black text-slate-600 uppercase tracking-widest px-2">${phase.phase}</h5>`;
+                
+                phase.items.forEach(item => {
+                    const btn = document.createElement('button');
+                    btn.id = `btn-${item.id}`;
+                    btn.onclick = () => changeContent(item.id);
+                    btn.className = "nav-item w-full flex flex-col gap-2 p-3 rounded-2xl transition-all duration-300 border border-transparent hover:bg-white/5 group";
+                    
+                    const isExam = item.type === 'exam';
+                    const numColor = isExam ? 'text-indigo-400' : 'text-slate-500';
+
+                    btn.innerHTML = `
+                        <div class="flex justify-between items-center w-full">
+                            <div class="text-[10px] font-mono ${numColor}">${String(item.id).padStart(2, '0')}</div>
+                            <div class="flex gap-1">
+                                <span class="tag-pill bg-slate-800 text-slate-500">${item.chapter}</span>
+                                <span class="tag-pill bg-indigo-500/10 text-indigo-400">${item.co}</span>
+                            </div>
+                        </div>
+                        <div class="text-left w-full">
+                            <h4 class="text-[11px] font-semibold text-slate-300 group-hover:text-white transition-colors leading-tight">${item.title}</h4>
+                        </div>
+                    `;
+                    sectionDiv.appendChild(btn);
+                });
+                menu.appendChild(sectionDiv);
+            });
+            changeContent(0);
+        }
+
+        function changeContent(id) {
+            const mastery = document.getElementById('masteryAssurance');
+            const podC = document.getElementById('podcastContainer');
+            const podE = document.getElementById('podcastEmpty');
+            const vid = document.getElementById('mainVideo');
+            const pod = document.getElementById('mainPodcast');
+            const status = document.getElementById('currentStatus');
+
+            const vTitle = document.getElementById('videoTitle');
+            const vTitleAr = document.getElementById('videoTitleAr');
+            const vMeta = document.getElementById('videoMeta');
+            const vMetaAr = document.getElementById('videoMetaAr');
+            const pTitleAr = document.getElementById('podcastTitleAr');
+            const pDescAr = document.getElementById('podcastDescAr');
+            const pPointsAr = document.getElementById('podcastPointsAr');
+            const pSource = document.getElementById('podcastSource');
+            const progBar = document.getElementById('progressBar');
+            const progText = document.getElementById('progressText');
+
+            if (mastery) mastery.style.display = (id === 0) ? 'block' : 'none';
+
+            let data;
+            if (id === 0) {
+                data = {
+                    title: "Strategic Mastery Overview", titleAr: "مقدمة استراتيجية الإتقان",
+                    desc: "The complete roadmap to mastering Chapters 1-8 for your final exam. Teaches how to apply Course Outcomes to 'Explain and Describe' questions, connecting the Big Picture of the IoT ecosystem.",
+                    descAr: "مقدمة استراتيجية الإتقان - سياق المادة العلمية وأهميتها للاختبار. إتقان المفاهيم التقنية المطلوبة للمنهج وكيفية توظيف هذه المعلومات لتحقيق الدرجة الكاملة.",
+                    videoFile: "overview.mp4", podcastId: null
+                };
+            } else {
+                curriculum.forEach(p => {
+                    const found = p.items.find(i => i.id === id);
+                    if(found) data = found;
+                });
+            }
+
+            if(!data) return;
+
+            document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
+            const activeBtn = document.getElementById('btn-' + id);
+            if(activeBtn) activeBtn.classList.add('active');
+
+            if(vTitle) vTitle.innerText = data.title;
+            if(vTitleAr) vTitleAr.innerText = data.titleAr;
+            if(status) status.innerText = (id === 0) ? 'Overview' : (data.type === 'exam' ? 'Synthesizer' : `Chapter ${data.chapter}`);
+            
+            if(vMeta) {
+                vMeta.innerHTML = `
+                    <div class="space-y-4">
+                        <p class="text-[13px] leading-relaxed text-slate-300">${data.desc}</p>
+                    </div>
+                `;
+            }
+
+            if(vMetaAr) {
+                vMetaAr.innerHTML = `
+                    <div class="space-y-4">
+                        <p class="text-[14px] leading-relaxed text-slate-300 font-medium">${data.descAr}</p>
+                    </div>
+                `;
+            }
+
+            if(vid) {
+                vid.src = data.videoFile;
+                vid.load();
+            }
+
+            // Podcast logic using Unified Repository
+            if (data.podcastId && podcasts[data.podcastId] && podC) {
+                const podData = podcasts[data.podcastId];
+                podC.classList.remove('hidden');
+                if(podE) podE.classList.add('hidden');
+                
+                if(pSource) pSource.src = podData.file;
+                if(pTitleAr) pTitleAr.innerText = podData.titleAr;
+                if(pDescAr) pDescAr.innerText = podData.summaryAr;
+                
+                if(pPointsAr && podData.pointsAr) {
+                    pPointsAr.innerHTML = podData.pointsAr.map(point => `<div class="bullet-ar">${point}</div>`).join('');
+                }
+                
+                if(pod) pod.load();
+            } else {
+                if(podC) podC.classList.add('hidden');
+                if(podE) podE.classList.remove('hidden');
+            }
+
+            let currentIndex = 0;
+            let totalItems = 0;
+            if (id !== 0) {
+                curriculum.forEach(p => {
+                    p.items.forEach(i => {
+                        totalItems++;
+                        if (i.id === id) currentIndex = totalItems;
+                    });
+                });
+            } else {
+                // To display 0% progress when on the overview
+                totalItems = 11;
+                currentIndex = 0;
+            }
+
+            const pVal = (currentIndex / totalItems) * 100;
+            if(progBar) progBar.style.width = `${pVal}%`;
+            if(progText) progText.innerText = `${Math.round(pVal)}%`;
+        }
+
+        window.onload = init;
+    </script>
+</body>
+</html>
